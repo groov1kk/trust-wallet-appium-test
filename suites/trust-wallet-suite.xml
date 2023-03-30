@@ -1,0 +1,38 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Trust Wallet suite">
+    <test name="Security happy path test">
+        <classes>
+            <class name="com.github.groov1kk.security.SecurityHappyPathTest"/>
+        </classes>
+    </test>
+
+    <test name="Secret phrase backup back button test">
+        <classes>
+            <class name="com.github.groov1kk.security.backup.SecretPhraseBackupBackButtonTest"/>
+        </classes>
+    </test>
+
+    <test name="Different passcode test">
+        <classes>
+            <class name="com.github.groov1kk.security.passcode.DifferentPasscodesTest"/>
+        </classes>
+    </test>
+
+    <test name="Rotate view pager left test">
+        <classes>
+            <class name="com.github.groov1kk.security.rotate.RotateViewPagerLeftTest"/>
+        </classes>
+    </test>
+
+    <test name="Rotate view pager right test">
+        <classes>
+            <class name="com.github.groov1kk.security.rotate.RotateViewPagerRightTest"/>
+        </classes>
+    </test>
+
+    <test name="Wrong recovery words order test">
+        <classes>
+            <class name="com.github.groov1kk.security.recovery.WrongRecoveryWordsOrderTest"/>
+        </classes>
+    </test>
+</suite>
