@@ -1,20 +1,20 @@
 package com.github.groov1kk.screens;
 
 import com.github.groov1kk.core.BaseScreen;
-import com.github.groov1kk.core.annotations.AndroidWaitFor;
+import com.github.groov1kk.core.PageObjects;
 import com.github.groov1kk.screens.widgets.PrivacyPolicies;
 import com.github.groov1kk.screens.widgets.ViewPager;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebElement;
 
-@AndroidWaitFor(@AndroidFindBy(id = "com.wallet.crypto.trustapp:id/new_account_action"))
 public class WelcomeScreen extends BaseScreen {
 
-  @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/title")
-  private WebElement title;
+  private static final String CREATE_NEW_WALLET_BUTTON_LOCATOR =
+      "com.wallet.crypto.trustapp:id/new_account_action";
 
-  @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/new_account_action")
+  @AndroidFindBy(id = CREATE_NEW_WALLET_BUTTON_LOCATOR)
   private WebElement buttonCreateNewWallet;
 
   @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/container")
@@ -130,5 +130,10 @@ public class WelcomeScreen extends BaseScreen {
    */
   public boolean hasImage() {
     return widgetViewPager.hasImage();
+  }
+
+  @Override
+  protected void isLoaded() throws Error {
+    PageObjects.requireElementVisible(this, AppiumBy.id(CREATE_NEW_WALLET_BUTTON_LOCATOR));
   }
 }
