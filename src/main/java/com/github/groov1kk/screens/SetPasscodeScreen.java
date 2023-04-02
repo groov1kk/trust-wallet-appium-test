@@ -6,8 +6,9 @@ import static java.lang.Integer.parseInt;
 import static java.util.Arrays.stream;
 
 import com.github.groov1kk.core.BaseScreen;
-import com.github.groov1kk.core.annotations.AndroidWaitFor;
+import com.github.groov1kk.core.PageObjects;
 import com.google.common.collect.Range;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import java.time.Duration;
@@ -15,9 +16,6 @@ import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.FluentWait;
 
-@AndroidWaitFor(
-    @AndroidFindBy(
-        xpath = "//androidx.compose.ui.platform.ComposeView//android.widget.TextView[1]"))
 public class SetPasscodeScreen extends BaseScreen {
 
   private static final String CREATE_PASSCODE_MESSAGE = "Create Passcode";
@@ -25,15 +23,15 @@ public class SetPasscodeScreen extends BaseScreen {
 
   private static final Range<Integer> NUMBER_RANGE = Range.closed(0, 9);
 
+  // Too fragile locators, I know :(. If I can, I would ask developers to add accessibility locators
+  // here.
+  private static final String TITLE_LOCATOR =
+      "//androidx.compose.ui.platform.ComposeView/android.view.View/android.widget.TextView[1]";
+
   @AndroidFindBy(xpath = "//android.widget.TextView[matches(@text, '\\d')]")
   private List<WebElement> digits;
 
-  // Too fragile locators, I know :(. If I can, I would ask developers to add accessibility locators
-  // here.
-
-  @AndroidFindBy(
-      xpath =
-          "//androidx.compose.ui.platform.ComposeView/android.view.View/android.widget.TextView[1]")
+  @AndroidFindBy(xpath = TITLE_LOCATOR)
   private WebElement title;
 
   @AndroidFindBy(
@@ -149,5 +147,10 @@ public class SetPasscodeScreen extends BaseScreen {
   private static int[] checkPasscode(int[] passcode) {
     checkState(passcode.length == 6, "Passcode length must exactly contains 6 digits");
     return passcode;
+  }
+
+  @Override
+  protected void isLoaded() throws Error {
+    PageObjects.requireElementVisible(this, AppiumBy.xpath(TITLE_LOCATOR));
   }
 }

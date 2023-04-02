@@ -1,15 +1,17 @@
 package com.github.groov1kk.screens;
 
 import com.github.groov1kk.core.BaseScreen;
-import com.github.groov1kk.core.annotations.AndroidWaitFor;
+import com.github.groov1kk.core.PageObjects;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebElement;
 
-@AndroidWaitFor(@AndroidFindBy(xpath = "//*[contains(@text, 'Back up manually')]"))
 public class SecretPhraseBackupScreen extends BaseScreen {
 
-  @AndroidFindBy(xpath = "//*[contains(@text, 'Back up manually')]")
+  private static final String BACKUP_MANUALLY_LOCATOR = "//*[contains(@text, 'Back up manually')]";
+
+  @AndroidFindBy(xpath = BACKUP_MANUALLY_LOCATOR)
   private WebElement backupManually;
 
   @AndroidFindBy(xpath = "//android.view.View[@content-desc='Back']")
@@ -37,5 +39,10 @@ public class SecretPhraseBackupScreen extends BaseScreen {
   public WelcomeScreen back() {
     buttonBack.click();
     return new WelcomeScreen(driver).waitForIt();
+  }
+
+  @Override
+  protected void isLoaded() throws Error {
+    PageObjects.requireElementVisible(this, AppiumBy.xpath(BACKUP_MANUALLY_LOCATOR));
   }
 }

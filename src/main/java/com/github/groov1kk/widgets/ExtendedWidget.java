@@ -1,6 +1,5 @@
 package com.github.groov1kk.widgets;
 
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.Widget;
 import org.openqa.selenium.WebElement;
 
@@ -14,9 +13,4 @@ public class ExtendedWidget extends Widget {
   public boolean isDisplayed() {
     return getWrappedElement().isDisplayed();
   }
-
-//  @Override
-//  public AppiumDriver getWrappedDriver() {
-//    return (AppiumDriver) super.getWrappedDriver();
-//  }
 }

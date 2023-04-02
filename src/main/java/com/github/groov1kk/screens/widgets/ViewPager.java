@@ -32,21 +32,21 @@ public class ViewPager extends ExtendedWidget {
     return image.isDisplayed();
   }
 
-  public void rotateLeft() {
+  public void swipeLeft() {
     Point source = image.getLocation();
     Point offset = source.moveBy(-650, 0);
 
-    rotate(source, offset);
+    swipe(source, offset);
   }
 
-  public void rotateRight() {
+  public void swipeRight() {
     Point source = image.getLocation();
     Point offset = source.moveBy(650, 0);
 
-    rotate(source, offset);
+    swipe(source, offset);
   }
 
-  private void rotate(Point source, Point offset) {
+  private void swipe(Point source, Point offset) {
     PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
     Sequence swipe = new Sequence(finger, 1);
     swipe.addAction(finger.createPointerMove(ofMillis(0), viewport(), source));
