@@ -17,14 +17,17 @@ public class SwipeAction implements Action {
 
   private final WebDriver driver;
 
-  private int initialLength = 1;
-  private Duration duration = ofMillis(200);
-  private PointerInput pointer = defaultPointer();
+  private int initialLength;
+  private Duration duration;
+  private PointerInput pointer;
   private Point source;
   private Point offset;
 
   public SwipeAction(WebDriver driver) {
     this.driver = Objects.requireNonNull(driver);
+    this.pointer = defaultPointer();
+    this.duration = ofMillis(200);
+    this.initialLength = 1;
   }
 
   public SwipeAction withPointer(PointerInput pointer) {
