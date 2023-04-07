@@ -1,6 +1,8 @@
 package com.github.groov1kk.widgets;
 
+import com.github.groov1kk.utils.actions.SwipeAction;
 import io.appium.java_client.pagefactory.Widget;
+import java.time.Duration;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
@@ -72,6 +74,33 @@ public abstract class CustomWidget extends Widget {
    */
   public boolean checkable() {
     return getBooleanAttribute("checkable");
+  }
+
+  /**
+   * Swipes the widget on the given X- and Y- axes offsets from its location.
+   *
+   * @param xOffset X-axis offset for the swipe
+   * @param yOffset Y-axis offset for the swipe
+   */
+  public void swipe(int xOffset, int yOffset) {
+    doSwipe(getLocation().moveBy(xOffset, yOffset));
+  }
+
+  /**
+   * Swipes the widget on a specific offset from its location.
+   *
+   * @param offset X and Y offset to swipe the widget
+   */
+  public void swipe(Point offset) {
+    doSwipe(getLocation().moveBy(offset.x, offset.y));
+  }
+
+  private void doSwipe(Point offset) {
+    new SwipeAction(getWrappedDriver())
+        .withSource(getLocation())
+        .withOffset(offset)
+        .withDuration(Duration.ofMillis(200))
+        .perform();
   }
 
   protected boolean getBooleanAttribute(String attrName) {

@@ -16,7 +16,7 @@ public class SwipeViewPagerLeftTest extends BaseRotateTest {
   }
 
   @Test(dependsOnMethods = "openApplication")
-  public void rotateLeft() {
+  public void swipeLeft() {
     SoftAssertions softAssertions = new SoftAssertions();
     for (String title : EXPECTED_TITLES) {
       softAssertions
