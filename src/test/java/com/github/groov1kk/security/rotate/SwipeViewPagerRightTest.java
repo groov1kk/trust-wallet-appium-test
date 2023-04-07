@@ -16,14 +16,14 @@ public class SwipeViewPagerRightTest extends BaseRotateTest {
   }
 
   @Test(dependsOnMethods = "openApplication")
-  public void rotateViewerLeft() {
+  public void swipeViewerLeft() {
     String imageTitle = welcomeScreen.swipeImageLeft().getTitle();
 
     assertThat(imageTitle).as("Check image title").isEqualTo(EXPECTED_TITLES.get(1));
   }
 
-  @Test(dependsOnMethods = "rotateViewerLeft")
-  public void rotateViewerRight() {
+  @Test(dependsOnMethods = "swipeViewerLeft")
+  public void swipeViewerRight() {
     String imageTitle = welcomeScreen.swipeImageRight().getTitle();
 
     assertThat(imageTitle).as("Check image title").isEqualTo(EXPECTED_TITLES.get(0));
