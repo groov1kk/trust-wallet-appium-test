@@ -18,15 +18,15 @@
         </classes>
     </test>
 
-    <test name="Rotate view pager left test">
+    <test name="Swipe view pager left test">
         <classes>
-            <class name="com.github.groov1kk.security.rotate.RotateViewPagerLeftTest"/>
+            <class name="com.github.groov1kk.security.rotate.SwipeViewPagerLeftTest"/>
         </classes>
     </test>
 
-    <test name="Rotate view pager right test">
+    <test name="Swipe view pager right test">
         <classes>
-            <class name="com.github.groov1kk.security.rotate.RotateViewPagerRightTest"/>
+            <class name="com.github.groov1kk.security.rotate.SwipeViewPagerRightTest"/>
         </classes>
     </test>
 

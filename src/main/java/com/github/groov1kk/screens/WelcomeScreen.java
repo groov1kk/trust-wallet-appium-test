@@ -4,10 +4,10 @@ import com.github.groov1kk.core.BaseScreen;
 import com.github.groov1kk.core.PageObjects;
 import com.github.groov1kk.screens.widgets.PrivacyPolicies;
 import com.github.groov1kk.screens.widgets.ViewPager;
+import com.github.groov1kk.widgets.Button;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import org.openqa.selenium.WebElement;
 
 public class WelcomeScreen extends BaseScreen {
 
@@ -15,7 +15,7 @@ public class WelcomeScreen extends BaseScreen {
       "com.wallet.crypto.trustapp:id/new_account_action";
 
   @AndroidFindBy(id = CREATE_NEW_WALLET_BUTTON_LOCATOR)
-  private WebElement buttonCreateNewWallet;
+  private Button buttonCreateNewWallet;
 
   @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/container")
   private PrivacyPolicies widgetPrivacyPolicies;
@@ -134,6 +134,6 @@ public class WelcomeScreen extends BaseScreen {
 
   @Override
   protected void isLoaded() throws Error {
-    PageObjects.requireElementVisible(this, AppiumBy.id(CREATE_NEW_WALLET_BUTTON_LOCATOR));
+    PageObjects.requireVisibleElement(this, AppiumBy.id(CREATE_NEW_WALLET_BUTTON_LOCATOR));
   }
 }

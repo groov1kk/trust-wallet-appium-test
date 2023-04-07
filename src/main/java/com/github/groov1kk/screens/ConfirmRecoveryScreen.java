@@ -5,6 +5,7 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toMap;
 
 import com.github.groov1kk.core.BaseScreen;
+import com.github.groov1kk.widgets.Button;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import java.util.Collection;
@@ -36,7 +37,7 @@ public class ConfirmRecoveryScreen extends BaseScreen {
   private WebElement typeMessage;
 
   @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/action_done")
-  private WebElement buttonDone;
+  private Button buttonDone;
 
   private final List<String> recoveryWords;
 
@@ -147,8 +148,9 @@ public class ConfirmRecoveryScreen extends BaseScreen {
    * putted there by pressing "Copy" button on the previous screen, would be using.
    *
    * @param words words to tap
-   * @throws IllegalArgumentException if both the given words and recovery words from the clipboard
-   *     are empty or combination of these words is incorrect
+   * @throws IllegalStateException if both the given words and the {@link #recoveryWords} are empty
+   * @throws IllegalArgumentException if the combination of either {@code words} or {@link
+   *     #recoveryWords} is incorrect
    */
   public void confirmRecovery(@Nullable Collection<String> words) {
     words = Optional.ofNullable(words).orElse(recoveryWords);

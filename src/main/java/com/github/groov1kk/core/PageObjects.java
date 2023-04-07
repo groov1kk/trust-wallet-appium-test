@@ -31,8 +31,8 @@ public final class PageObjects {
    * @throws Error if it is not possible to find an element using the given locator or if the
    *     element is not visible
    */
-  public static WebElement requireElementVisible(BaseScreen page, By locator) {
-    return requireElementVisible(
+  public static WebElement requireVisibleElement(BaseScreen page, By locator) {
+    return requireVisibleElement(
         page, locator, String.format("Element with locator [%s] is not visible", locator));
   }
 
@@ -47,7 +47,7 @@ public final class PageObjects {
    * @throws Error if it is not possible to find an element using the given locator or if the
    *     element is not visible
    */
-  public static WebElement requireElementVisible(BaseScreen page, By locator, String message) {
+  public static WebElement requireVisibleElement(BaseScreen page, By locator, String message) {
     WebElement element;
     try {
       element = page.findElement(locator);
