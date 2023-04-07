@@ -7,6 +7,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +29,7 @@ public class AppiumConfiguration {
   @Bean
   @ThreadLocal
   public AndroidDriver androidDriver(
-      AppiumDriverLocalService service,
+      @Autowired AppiumDriverLocalService service,
       @Value("${device.name}") String deviceName,
       @Value("${app.path}") String appPath,
       @Value("${app.package}") String appPackage,
@@ -45,7 +46,7 @@ public class AppiumConfiguration {
   }
 
   @Bean
-  public CustomScopeConfigurer customScopeConfigurer() {
+  public static CustomScopeConfigurer customScopeConfigurer() {
     CustomScopeConfigurer configurer = new CustomScopeConfigurer();
     configurer.addScope(ThreadLocal.NAME, new SimpleThreadScope());
     return configurer;

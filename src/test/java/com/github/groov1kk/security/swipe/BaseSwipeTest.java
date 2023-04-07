@@ -1,9 +1,9 @@
-package com.github.groov1kk.security.rotate;
+package com.github.groov1kk.security.swipe;
 
 import com.github.groov1kk.security.SecurityBaseTest;
 import java.util.List;
 
-public class BaseRotateTest extends SecurityBaseTest {
+public class BaseSwipeTest extends SecurityBaseTest {
 
   protected static final List<String> EXPECTED_TITLES =
       List.of(

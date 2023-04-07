@@ -1,10 +1,7 @@
 package com.github.groov1kk.utils.actions;
 
-import static java.time.Duration.ofMillis;
-import static java.util.Collections.singleton;
-import static org.openqa.selenium.interactions.PointerInput.Origin.viewport;
-
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Objects;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
@@ -16,55 +13,79 @@ import org.openqa.selenium.interactions.Sequence;
 public class SwipeAction implements Action {
 
   private final WebDriver driver;
+  private final int initialLength;
+  private final Duration duration;
+  private final PointerInput pointer;
+  private final Point source;
+  private final Point offset;
 
-  private int initialLength = 1;
-  private Duration duration = ofMillis(200);
-  private PointerInput pointer = defaultPointer();
-  private Point source;
-  private Point offset;
-
-  public SwipeAction(WebDriver driver) {
-    this.driver = Objects.requireNonNull(driver);
-  }
-
-  public SwipeAction withPointer(PointerInput pointer) {
-    this.pointer = Objects.requireNonNull(pointer);
-    return this;
-  }
-
-  public SwipeAction withInitialLength(int length) {
-    this.initialLength = length;
-    return this;
-  }
-
-  public SwipeAction withSource(Point source) {
-    this.source = source;
-    return this;
-  }
-
-  public SwipeAction withOffset(Point offset) {
-    this.offset = offset;
-    return this;
-  }
-
-  public SwipeAction withDuration(Duration duration) {
-    this.duration = duration;
-    return this;
+  private SwipeAction(Builder builder) {
+    this.initialLength = builder.initialLength;
+    this.driver = builder.driver;
+    this.pointer = builder.pointer;
+    this.duration = builder.duration;
+    this.source = builder.source;
+    this.offset = builder.offset;
   }
 
   @Override
   public void perform() {
+    PointerInput.Origin origin = PointerInput.Origin.viewport();
+    PointerInput.MouseButton button = PointerInput.MouseButton.LEFT;
+
     Sequence sequence =
         new Sequence(pointer, initialLength)
-            .addAction(pointer.createPointerMove(ofMillis(0), viewport(), source))
-            .addAction(pointer.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
-            .addAction(pointer.createPointerMove(duration, viewport(), offset))
-            .addAction(pointer.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+            .addAction(pointer.createPointerMove(Duration.ZERO, origin, source))
+            .addAction(pointer.createPointerDown(button.asArg()))
+            .addAction(pointer.createPointerMove(duration, origin, offset))
+            .addAction(pointer.createPointerUp(button.asArg()));
 
-    ((Interactive) driver).perform(singleton(sequence));
+    ((Interactive) driver).perform(Collections.singleton(sequence));
   }
 
-  private static PointerInput defaultPointer() {
-    return new PointerInput(PointerInput.Kind.TOUCH, "default_pointer");
+  public static class Builder {
+
+    private final WebDriver driver;
+
+    private int initialLength;
+    private Duration duration;
+    private PointerInput pointer;
+    private Point source;
+    private Point offset;
+
+    public Builder(WebDriver driver) {
+      this.driver = Objects.requireNonNull(driver, "Driver must not be null");
+      this.pointer = new PointerInput(PointerInput.Kind.TOUCH, "default_pointer");
+      this.duration = Duration.ofMillis(200);
+    }
+
+    public Builder withPointer(PointerInput pointer) {
+      this.pointer = Objects.requireNonNull(pointer, "Pointer input must not be null");
+      return this;
+    }
+
+    public Builder withInitialLength(int length) {
+      this.initialLength = length;
+      return this;
+    }
+
+    public Builder withSource(Point source) {
+      this.source = source;
+      return this;
+    }
+
+    public Builder withOffset(Point offset) {
+      this.offset = offset;
+      return this;
+    }
+
+    public Builder withDuration(Duration duration) {
+      this.duration = duration;
+      return this;
+    }
+
+    public SwipeAction build() {
+      return new SwipeAction(this);
+    }
   }
 }

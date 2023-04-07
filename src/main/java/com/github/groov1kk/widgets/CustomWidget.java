@@ -77,29 +77,29 @@ public abstract class CustomWidget extends Widget {
   }
 
   /**
+   * Swipes the widget on a specific offset from its location.
+   *
+   * @param offset X and Y offset to swipe the widget
+   */
+  public void swipe(Point offset) {
+    swipe(offset.x, offset.y);
+  }
+
+  /**
    * Swipes the widget on the given X- and Y- axes offsets from its location.
    *
    * @param xOffset X-axis offset for the swipe
    * @param yOffset Y-axis offset for the swipe
    */
   public void swipe(int xOffset, int yOffset) {
-    doSwipe(getLocation().moveBy(xOffset, yOffset));
-  }
+    Point source = getLocation();
+    Point offset = source.moveBy(xOffset, yOffset);
 
-  /**
-   * Swipes the widget on a specific offset from its location.
-   *
-   * @param offset X and Y offset to swipe the widget
-   */
-  public void swipe(Point offset) {
-    doSwipe(getLocation().moveBy(offset.x, offset.y));
-  }
-
-  private void doSwipe(Point offset) {
-    new SwipeAction(getWrappedDriver())
-        .withSource(getLocation())
+    new SwipeAction.Builder(getWrappedDriver())
+        .withSource(source)
         .withOffset(offset)
         .withDuration(Duration.ofMillis(200))
+        .build()
         .perform();
   }
 

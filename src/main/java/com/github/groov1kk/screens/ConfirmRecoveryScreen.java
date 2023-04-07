@@ -1,13 +1,11 @@
 package com.github.groov1kk.screens;
 
-import static java.lang.Integer.parseInt;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toMap;
-
 import com.github.groov1kk.core.BaseScreen;
 import com.github.groov1kk.widgets.Button;
+import com.google.common.base.Preconditions;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +14,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -67,10 +67,12 @@ public class ConfirmRecoveryScreen extends BaseScreen {
    *
    * @param words list of words to tap
    * @return {@code this} screen
-   * @throws IllegalArgumentException if at least one word is not present on the screen
+   * @throws IllegalArgumentException if the {@code words} is empty or at least one of the words is
+   *     not present on the screen
    */
   public ConfirmRecoveryScreen tapWords(String... words) {
-    stream(words).forEach(this::tapWord);
+    Preconditions.checkArgument(ArrayUtils.isNotEmpty(words), "Words must not be empty");
+    Arrays.stream(words).forEach(this::tapWord);
     return this;
   }
 
@@ -79,9 +81,11 @@ public class ConfirmRecoveryScreen extends BaseScreen {
    *
    * @param words list of words to tap
    * @return {@code this} screen
-   * @throws IllegalArgumentException if at least one word is not present on the screen
+   * @throws IllegalArgumentException if the {@code words} is empty or at least one of the words is
+   *     not present on the screen
    */
   public ConfirmRecoveryScreen tapWords(Collection<String> words) {
+    Preconditions.checkArgument(CollectionUtils.isNotEmpty(words), "Words must not be empty");
     words.forEach(this::tapWord);
     return this;
   }
@@ -94,9 +98,13 @@ public class ConfirmRecoveryScreen extends BaseScreen {
   public Map<Integer, String> getTappedWords() {
     return typedWords.stream()
         .collect(
-            toMap(
-                word -> parseInt(word.findElement(WORDS_POSITION_LOCATOR).getText()),
-                word -> word.findElement(WORDS_VALUE_LOCATOR).getText()));
+            // Not recommended to use toUnmodifiableMap here due to the resulted map would have the
+            // reversed order it's of keys
+            Collectors.collectingAndThen(
+                Collectors.toMap(
+                    word -> Integer.parseInt(word.findElement(WORDS_POSITION_LOCATOR).getText()),
+                    word -> word.findElement(WORDS_VALUE_LOCATOR).getText()),
+                Collections::unmodifiableMap));
   }
 
   /**
@@ -148,22 +156,15 @@ public class ConfirmRecoveryScreen extends BaseScreen {
    * putted there by pressing "Copy" button on the previous screen, would be using.
    *
    * @param words words to tap
-   * @throws IllegalStateException if both the given words and the {@link #recoveryWords} are empty
-   * @throws IllegalArgumentException if the combination of either {@code words} or {@link
+   * @throws IllegalStateException if the combination of either {@code words} or {@link
    *     #recoveryWords} is incorrect
+   * @throws IllegalArgumentException if both the given words and the {@link #recoveryWords} are
+   *     empty, or they contain at least one word that is not present on the screen
    */
   public void confirmRecovery(@Nullable Collection<String> words) {
-    words = Optional.ofNullable(words).orElse(recoveryWords);
-    if (words.isEmpty()) {
-      throw new IllegalStateException("To proceed you must pass recovery words");
-    }
+    tapWords(Optional.ofNullable(words).orElse(recoveryWords));
 
-    tapWords(words);
-
-    if (!canConfirm()) {
-      throw new IllegalArgumentException(String.format("Combination of words %s is wrong", words));
-    }
-
+    Preconditions.checkState(canConfirm(), "The combination of words is wrong: [%s]", words);
     buttonDone.click();
   }
 

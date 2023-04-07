@@ -1,12 +1,12 @@
 package com.github.groov1kk.screens;
 
-import static com.google.common.base.Preconditions.checkState;
 import static io.appium.java_client.AppiumBy.id;
 
 import com.github.groov1kk.core.BaseScreen;
 import com.github.groov1kk.core.PageObjects;
 import com.github.groov1kk.widgets.Button;
 import com.github.groov1kk.widgets.Checkbox;
+import com.google.common.base.Preconditions;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
@@ -80,7 +80,7 @@ public class ConsentScreen extends BaseScreen {
    * @return Recovery Phrase screen
    */
   public RecoveryPhraseScreen proceed() {
-    checkState(canProceed(), "Button 'Continue' is not clickable");
+    Preconditions.checkState(canProceed(), "Button 'Continue' is not clickable");
     buttonContinue.click();
     return new RecoveryPhraseScreen(driver).waitForIt();
   }

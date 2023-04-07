@@ -1,26 +1,21 @@
 package com.github.groov1kk.screens;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
-import static java.lang.Integer.parseInt;
-import static java.util.Arrays.stream;
-
 import com.github.groov1kk.core.BaseScreen;
 import com.github.groov1kk.core.PageObjects;
 import com.github.groov1kk.widgets.CustomWidget;
 import com.github.groov1kk.widgets.Text;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Range;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
-import org.openqa.selenium.support.ui.FluentWait;
 
 public class SetPasscodeScreen extends BaseScreen {
 
-  private static final String CREATE_PASSCODE_MESSAGE = "Create Passcode";
-  private static final String CONFIRM_PASSCODE_MESSAGE = "Confirm Passcode";
+  public static final String CREATE_PASSCODE_TITLE = "Create Passcode";
+  public static final String CONFIRM_PASSCODE_TITLE = "Confirm Passcode";
 
   private static final Range<Integer> NUMBER_RANGE = Range.closed(0, 9);
 
@@ -53,9 +48,9 @@ public class SetPasscodeScreen extends BaseScreen {
    * @throws IllegalArgumentException if the given number is not enclosed in [0-9] range.
    */
   public SetPasscodeScreen pressNumber(int number) {
-    checkArgument(NUMBER_RANGE.contains(number), "Number must be in [0-9] range");
+    Preconditions.checkArgument(NUMBER_RANGE.contains(number), "Number must be in [0-9] range");
     digits.stream()
-        .filter(digit -> parseInt(digit.getText()) == number)
+        .filter(digit -> Integer.parseInt(digit.getText()) == number)
         .forEach(CustomWidget::click);
     return this;
   }
@@ -69,7 +64,7 @@ public class SetPasscodeScreen extends BaseScreen {
    *     [0-9] range.
    */
   public SetPasscodeScreen pressNumbers(int... numbers) {
-    stream(numbers).forEach(this::pressNumber);
+    Arrays.stream(numbers).forEach(this::pressNumber);
     return this;
   }
 
@@ -98,7 +93,8 @@ public class SetPasscodeScreen extends BaseScreen {
    *     in [0-9] range, or the length of passcode does not match 6.
    */
   public SetPasscodeScreen createPasscode(int... passcode) {
-    checkState(getTitle().equals(CREATE_PASSCODE_MESSAGE), "Passcode has already been typed");
+    Preconditions.checkState(
+        CREATE_PASSCODE_TITLE.equals(getTitle()), "Passcode has already been typed");
     return pressNumbers(checkPasscode(passcode)).waitForPasscodeCreation();
   }
 
@@ -113,7 +109,8 @@ public class SetPasscodeScreen extends BaseScreen {
    *     in [0-9] range, or the length of passcode does not match 6.
    */
   public SetPasscodeScreen confirmPasscode(int... passcode) {
-    checkState(getTitle().equals(CONFIRM_PASSCODE_MESSAGE), "Passcode has not been typed yet");
+    Preconditions.checkState(
+        CONFIRM_PASSCODE_TITLE.equals(getTitle()), "Passcode has not been typed yet");
     return pressNumbers(checkPasscode(passcode));
   }
 
@@ -133,21 +130,16 @@ public class SetPasscodeScreen extends BaseScreen {
    */
   public String getPasscodeMessage() {
     // Usually appears with a delay
-    new FluentWait<>(passcodeMessage)
-        .withTimeout(Duration.ofSeconds(2))
-        .until(CustomWidget::isDisplayed);
-    return passcodeMessage.getText();
+    return waitFor(passcodeMessage).until(CustomWidget::getText);
   }
 
   private SetPasscodeScreen waitForPasscodeCreation() {
-    new FluentWait<>(this)
-        .withTimeout(Duration.ofSeconds(5))
-        .until(it -> it.getTitle().equals(CONFIRM_PASSCODE_MESSAGE));
+    waitFor(this).until(it -> it.getTitle().equals(CONFIRM_PASSCODE_TITLE));
     return this;
   }
 
   private static int[] checkPasscode(int[] passcode) {
-    checkState(passcode.length == 6, "Passcode length must exactly contains 6 digits");
+    Preconditions.checkState(passcode.length == 6, "Passcode must exactly contains 6 digits");
     return passcode;
   }
 

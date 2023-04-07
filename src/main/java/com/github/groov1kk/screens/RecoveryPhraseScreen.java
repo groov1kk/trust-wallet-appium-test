@@ -1,9 +1,5 @@
 package com.github.groov1kk.screens;
 
-import static java.lang.Integer.parseInt;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toMap;
-
 import com.github.groov1kk.core.BaseScreen;
 import com.github.groov1kk.widgets.Button;
 import com.github.groov1kk.widgets.Text;
@@ -11,8 +7,10 @@ import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.clipboard.HasClipboard;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
@@ -59,9 +57,13 @@ public class RecoveryPhraseScreen extends BaseScreen {
   public Map<Integer, String> getWords() {
     return words.stream()
         .collect(
-            toMap(
-                word -> parseInt(word.findElement(WORD_POSITION_LOCATOR).getText()),
-                word -> word.findElement(WORD_VALUE_LOCATOR).getText()));
+            // Not recommended to use toUnmodifiableMap here due to the resulted map would have the
+            // reversed order it's of keys
+            Collectors.collectingAndThen(
+                Collectors.toMap(
+                    word -> Integer.parseInt(word.findElement(WORD_POSITION_LOCATOR).getText()),
+                    word -> word.findElement(WORD_VALUE_LOCATOR).getText()),
+                Collections::unmodifiableMap));
   }
 
   /**
@@ -106,6 +108,6 @@ public class RecoveryPhraseScreen extends BaseScreen {
       String clipboardText = ((HasClipboard) driver).getClipboardText();
       return Splitter.on(" ").splitToList(clipboardText);
     }
-    return emptyList();
+    return Collections.emptyList();
   }
 }

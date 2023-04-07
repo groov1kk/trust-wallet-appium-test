@@ -20,13 +20,13 @@
 
     <test name="Swipe view pager left test">
         <classes>
-            <class name="com.github.groov1kk.security.rotate.SwipeViewPagerLeftTest"/>
+            <class name="com.github.groov1kk.security.swipe.SwipeViewPagerLeftTest"/>
         </classes>
     </test>
 
     <test name="Swipe view pager right test">
         <classes>
-            <class name="com.github.groov1kk.security.rotate.SwipeViewPagerRightTest"/>
+            <class name="com.github.groov1kk.security.swipe.SwipeViewPagerRightTest"/>
         </classes>
     </test>
 

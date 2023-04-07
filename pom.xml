@@ -18,6 +18,7 @@
         <spring.version>6.0.7</spring.version>
         <appium.version>8.3.0</appium.version>
         <testng.version>7.7.1</testng.version>
+        <selenium.version>4.8.1</selenium.version>
 
         <!-- args -->
         <jvm.options>--add-opens java.base/java.lang=ALL-UNNAMED</jvm.options>
@@ -69,12 +70,12 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-remote-driver</artifactId>
-            <version>4.8.1</version>
+            <version>${selenium.version}</version>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-support</artifactId>
-            <version>4.8.1</version>
+            <version>${selenium.version}</version>
         </dependency>
 
         <dependency>
@@ -93,6 +94,23 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-reload4j</artifactId>
+            <version>2.0.7</version>
         </dependency>
 
         <dependency>

@@ -3,51 +3,46 @@ package com.github.groov1kk.testng;
 import static com.github.groov1kk.utils.PathUtils.toAbsolutePath;
 
 import io.appium.java_client.InteractsWithApps;
-import java.util.Arrays;
-import java.util.Objects;
-import javax.annotation.Nullable;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.env.Environment;
-import org.testng.ITestContext;
+import org.testng.ITestResult;
 
-/** Re-installs and restarts an application after each test. */
-public class ReinstallApplicationListener extends ContextAwareTestListener {
+/** Re-installs and restarts an application before each XML test. */
+public class ReinstallApplicationListener extends ApplicationContextAwareTestListener {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReinstallApplicationListener.class);
+
+  private volatile boolean shouldReinstall = true;
 
   @Override
-  public void onFinish(ITestContext testContext) {
-    ApplicationContext context = getApplicationContext(testContext);
+  public void onTestStart(ITestResult result) {
+    ApplicationContext context = getApplicationContext(result);
     if (context == null) {
       return;
     }
 
-    InteractsWithApps appInteractor = getApplicationInteractor(context);
-    if (appInteractor != null) {
-      Environment environment = context.getEnvironment();
-      String bundleId = environment.getProperty("app.package");
-      String appPath = toAbsolutePath(environment.getProperty("app.path"));
+    if (shouldReinstall) {
+      synchronized (this) {
+        if (shouldReinstall) {
+          InteractsWithApps appInteractor = getBeanSafely(context, InteractsWithApps.class);
+          if (appInteractor == null) {
+            LOGGER.warn("Unable to reinstall the application");
+            return;
+          }
 
-      appInteractor.removeApp(bundleId);
-      appInteractor.installApp(appPath);
-      appInteractor.activateApp(bundleId);
-    }
-  }
+          Environment environment = context.getEnvironment();
+          String bundleId = environment.getProperty("app.package");
+          String appPath = toAbsolutePath(environment.getProperty("app.path"));
 
-  @Nullable
-  private ApplicationContext getApplicationContext(ITestContext testContext) {
-    return Arrays.stream(testContext.getAllTestMethods())
-        .map(this::getApplicationContext)
-        .filter(Objects::nonNull)
-        .findFirst()
-        .orElse(null);
-  }
+          appInteractor.removeApp(bundleId);
+          appInteractor.installApp(appPath);
+          appInteractor.activateApp(bundleId);
 
-  @Nullable
-  private InteractsWithApps getApplicationInteractor(ApplicationContext context) {
-    try {
-      return context.getBean(InteractsWithApps.class);
-    } catch (NoSuchBeanDefinitionException e) {
-      return null;
+          shouldReinstall = false;
+        }
+      }
     }
   }
 }

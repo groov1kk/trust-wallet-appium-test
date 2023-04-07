@@ -5,9 +5,12 @@ import com.github.groov1kk.core.PageObjects;
 import com.github.groov1kk.screens.widgets.PrivacyPolicies;
 import com.github.groov1kk.screens.widgets.ViewPager;
 import com.github.groov1kk.widgets.Button;
+import com.google.common.base.Preconditions;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import java.time.Clock;
+import java.time.Duration;
 
 public class WelcomeScreen extends BaseScreen {
 
@@ -27,6 +30,10 @@ public class WelcomeScreen extends BaseScreen {
     super(driver);
   }
 
+  protected WelcomeScreen(AppiumDriver driver, Clock clock, Duration duration) {
+    super(driver, clock, duration);
+  }
+
   /**
    * Opens Trust Wallet application.
    *
@@ -35,6 +42,20 @@ public class WelcomeScreen extends BaseScreen {
    */
   public static WelcomeScreen open(AppiumDriver driver) {
     return new WelcomeScreen(driver).waitForIt();
+  }
+
+  /**
+   * Opens Trust Wallet application. Provides to specify waiting time when this screen would be
+   * ready to work.
+   *
+   * @param driver instance of Appium Driver
+   * @param clock clock instance to measure the timeout
+   * @param timeout timeout in seconds
+   * @return Trust Wallet welcome screen
+   * @see org.openqa.selenium.support.ui.SlowLoadableComponent
+   */
+  public static WelcomeScreen open(AppiumDriver driver, Clock clock, Duration timeout) {
+    return new WelcomeScreen(driver, clock, timeout).waitForIt();
   }
 
   /** Clicks on the "New Wallet" button. */
@@ -62,7 +83,7 @@ public class WelcomeScreen extends BaseScreen {
    *
    * @return is private policy fragment visible
    */
-  public boolean isPrivatePoliciesFragmentVisible() {
+  public boolean arePrivatePoliciesVisible() {
     return widgetPrivacyPolicies.isDisplayed();
   }
 
@@ -72,6 +93,7 @@ public class WelcomeScreen extends BaseScreen {
    * @return {@code this} screen
    */
   public WelcomeScreen acceptPrivatePolicies() {
+    Preconditions.checkState(arePrivatePoliciesVisible(), "Private policies are not visible");
     widgetPrivacyPolicies.accept();
     return this;
   }
@@ -89,7 +111,7 @@ public class WelcomeScreen extends BaseScreen {
   public SetPasscodeScreen createNewWallet() {
     clickCreateNewWallet();
 
-    if (isPrivatePoliciesFragmentVisible()) {
+    if (arePrivatePoliciesVisible()) {
       acceptPrivatePolicies();
     }
 

@@ -1,4 +1,4 @@
-package com.github.groov1kk.security.rotate;
+package com.github.groov1kk.security.swipe;
 
 import static com.github.groov1kk.screens.WelcomeScreen.open;
 
@@ -6,7 +6,7 @@ import com.github.groov1kk.screens.WelcomeScreen;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
 
-public class SwipeViewPagerLeftTest extends BaseRotateTest {
+public class SwipeViewPagerLeftTest extends BaseSwipeTest {
 
   private WelcomeScreen welcomeScreen;
 

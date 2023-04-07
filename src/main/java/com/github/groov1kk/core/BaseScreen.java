@@ -13,16 +13,20 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.SlowLoadableComponent;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /** PageObject pattern representation. */
 public abstract class BaseScreen extends SlowLoadableComponent<BaseScreen>
     implements WrapsDriver, SearchContext {
 
+  public static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
+
   protected final AppiumDriver driver;
 
   protected BaseScreen(AppiumDriver driver) {
-    this(driver, Clock.systemDefaultZone(), Duration.ofSeconds(10));
+    this(driver, Clock.systemDefaultZone(), DEFAULT_TIMEOUT);
   }
 
   protected BaseScreen(AppiumDriver driver, Clock clock, Duration timeout) {
@@ -48,6 +52,28 @@ public abstract class BaseScreen extends SlowLoadableComponent<BaseScreen>
   protected static <T extends BaseScreen> T create(
       Class<T> clazz, AppiumDriver driver, Object... args) {
     return ReflectionUtils.newInstance(clazz, ObjectArrays.concat(driver, args));
+  }
+
+  /**
+   * Returns an instance of {@link WebDriverWait} initialized with {@link #driver} and {@link
+   * #DEFAULT_TIMEOUT}.
+   *
+   * @return web driver wait
+   */
+  protected WebDriverWait waitFor() {
+    return new WebDriverWait(driver, DEFAULT_TIMEOUT);
+  }
+
+  /**
+   * Returns an instance of {@link FluentWait} initialized with {@link #DEFAULT_TIMEOUT}, so you
+   * don't have to specify the timeout value every time explicitly.
+   *
+   * @param input the input value to pass the evaluated condition
+   * @return fluent wait
+   * @param <T> input type
+   */
+  protected <T> FluentWait<T> waitFor(T input) {
+    return new FluentWait<>(input).withTimeout(DEFAULT_TIMEOUT);
   }
 
   /**
