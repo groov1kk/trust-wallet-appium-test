@@ -5,6 +5,8 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toMap;
 
 import com.github.groov1kk.core.BaseScreen;
+import com.github.groov1kk.widgets.Button;
+import com.github.groov1kk.widgets.Text;
 import com.google.common.base.Splitter;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.clipboard.HasClipboard;
@@ -20,21 +22,21 @@ public class RecoveryPhraseScreen extends BaseScreen {
   private static final By WORD_VALUE_LOCATOR = By.id("com.wallet.crypto.trustapp:id/value");
 
   @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/title")
-  private WebElement title;
+  private Text title;
 
   @AndroidFindBy(
       xpath =
           "//*[@resource-id='com.wallet.crypto.trustapp:id/phrase']/android.widget.LinearLayout")
-  private List<WebElement> words;
+  private List<Text> words;
 
   @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/action_copy")
-  private WebElement buttonCopy;
+  private Text buttonCopy;
 
   @AndroidFindBy(className = "android.widget.Toast")
   private WebElement toastCopy;
 
   @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/action_verify")
-  private WebElement buttonContinue;
+  private Button buttonContinue;
 
   protected RecoveryPhraseScreen(AppiumDriver driver) {
     super(driver);

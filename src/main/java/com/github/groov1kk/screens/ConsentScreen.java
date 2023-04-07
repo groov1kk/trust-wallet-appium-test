@@ -1,15 +1,15 @@
 package com.github.groov1kk.screens;
 
-import static com.github.groov1kk.utils.WebElementUtils.check;
 import static com.google.common.base.Preconditions.checkState;
 import static io.appium.java_client.AppiumBy.id;
 
 import com.github.groov1kk.core.BaseScreen;
 import com.github.groov1kk.core.PageObjects;
+import com.github.groov1kk.widgets.Button;
+import com.github.groov1kk.widgets.Checkbox;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import org.openqa.selenium.WebElement;
 
 public class ConsentScreen extends BaseScreen {
 
@@ -17,18 +17,18 @@ public class ConsentScreen extends BaseScreen {
 
   @AndroidFindBy(
       xpath = "//*[@resource-id='com.wallet.crypto.trustapp:id/concent1']//android.widget.CheckBox")
-  private WebElement checkboxILoseMySecretPhrase;
+  private Checkbox checkboxILoseMySecretPhrase;
 
   @AndroidFindBy(
       xpath = "//*[@resource-id='com.wallet.crypto.trustapp:id/concent2']//android.widget.CheckBox")
-  private WebElement checkboxIExposeMySecretPhrase;
+  private Checkbox checkboxIExposeMySecretPhrase;
 
   @AndroidFindBy(
       xpath = "//*[@resource-id='com.wallet.crypto.trustapp:id/concent3']//android.widget.CheckBox")
-  private WebElement checkboxITrustWalletSupport;
+  private Checkbox checkboxITrustWalletSupport;
 
   @AndroidFindBy(id = BUTTON_CONTINUE_LOCATOR)
-  private WebElement buttonContinue;
+  private Button buttonContinue;
 
   protected ConsentScreen(AppiumDriver driver) {
     super(driver);
@@ -40,7 +40,7 @@ public class ConsentScreen extends BaseScreen {
    * @return {@code this} screen
    */
   public ConsentScreen checkILoseMySecretPhrase() {
-    check(checkboxILoseMySecretPhrase);
+    checkboxILoseMySecretPhrase.check();
     return this;
   }
 
@@ -50,7 +50,7 @@ public class ConsentScreen extends BaseScreen {
    * @return {@code this} screen
    */
   public ConsentScreen checkIExposeMySecretPhrase() {
-    check(checkboxIExposeMySecretPhrase);
+    checkboxIExposeMySecretPhrase.check();
     return this;
   }
 
@@ -60,7 +60,7 @@ public class ConsentScreen extends BaseScreen {
    * @return {@code this} screen
    */
   public ConsentScreen checkITrustWalletSupport() {
-    check(checkboxITrustWalletSupport);
+    checkboxITrustWalletSupport.check();
     return this;
   }
 
@@ -96,6 +96,6 @@ public class ConsentScreen extends BaseScreen {
 
   @Override
   protected void isLoaded() throws Error {
-    PageObjects.requireElementVisible(this, AppiumBy.id(BUTTON_CONTINUE_LOCATOR));
+    PageObjects.requireVisibleElement(this, AppiumBy.id(BUTTON_CONTINUE_LOCATOR));
   }
 }

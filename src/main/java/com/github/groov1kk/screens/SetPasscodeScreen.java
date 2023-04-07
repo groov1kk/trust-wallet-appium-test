@@ -7,13 +7,14 @@ import static java.util.Arrays.stream;
 
 import com.github.groov1kk.core.BaseScreen;
 import com.github.groov1kk.core.PageObjects;
+import com.github.groov1kk.widgets.CustomWidget;
+import com.github.groov1kk.widgets.Text;
 import com.google.common.collect.Range;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import java.time.Duration;
 import java.util.List;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.FluentWait;
 
 public class SetPasscodeScreen extends BaseScreen {
@@ -29,16 +30,16 @@ public class SetPasscodeScreen extends BaseScreen {
       "//androidx.compose.ui.platform.ComposeView/android.view.View/android.widget.TextView[1]";
 
   @AndroidFindBy(xpath = "//android.widget.TextView[matches(@text, '\\d')]")
-  private List<WebElement> digits;
+  private List<Text> digits;
 
   @AndroidFindBy(xpath = TITLE_LOCATOR)
-  private WebElement title;
+  private Text title;
 
   @AndroidFindBy(
       xpath =
           "//androidx.compose.ui.platform.ComposeView/android.view.View/android.widget.TextView[2]")
   // does not work when message is absent. Need additional locator here
-  private WebElement passcodeMessage;
+  private Text passcodeMessage;
 
   protected SetPasscodeScreen(AppiumDriver driver) {
     super(driver);
@@ -53,7 +54,9 @@ public class SetPasscodeScreen extends BaseScreen {
    */
   public SetPasscodeScreen pressNumber(int number) {
     checkArgument(NUMBER_RANGE.contains(number), "Number must be in [0-9] range");
-    digits.stream().filter(digit -> parseInt(digit.getText()) == number).forEach(WebElement::click);
+    digits.stream()
+        .filter(digit -> parseInt(digit.getText()) == number)
+        .forEach(CustomWidget::click);
     return this;
   }
 
@@ -132,8 +135,7 @@ public class SetPasscodeScreen extends BaseScreen {
     // Usually appears with a delay
     new FluentWait<>(passcodeMessage)
         .withTimeout(Duration.ofSeconds(2))
-        .until(WebElement::isDisplayed);
-
+        .until(CustomWidget::isDisplayed);
     return passcodeMessage.getText();
   }
 
@@ -151,6 +153,6 @@ public class SetPasscodeScreen extends BaseScreen {
 
   @Override
   protected void isLoaded() throws Error {
-    PageObjects.requireElementVisible(this, AppiumBy.xpath(TITLE_LOCATOR));
+    PageObjects.requireVisibleElement(this, AppiumBy.xpath(TITLE_LOCATOR));
   }
 }

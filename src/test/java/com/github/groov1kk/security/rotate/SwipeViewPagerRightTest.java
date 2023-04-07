@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.github.groov1kk.screens.WelcomeScreen;
 import org.testng.annotations.Test;
 
-public class RotateViewPagerRightTest extends BaseRotateTest {
+public class SwipeViewPagerRightTest extends BaseRotateTest {
 
   private WelcomeScreen welcomeScreen;
 

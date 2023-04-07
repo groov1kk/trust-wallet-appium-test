@@ -4,7 +4,9 @@ import static java.time.Duration.ofMillis;
 import static java.util.Collections.singleton;
 import static org.openqa.selenium.interactions.PointerInput.Origin.viewport;
 
-import com.github.groov1kk.widgets.ExtendedWidget;
+import com.github.groov1kk.widgets.CustomWidget;
+import com.github.groov1kk.widgets.Image;
+import com.github.groov1kk.widgets.Text;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.Point;
@@ -12,13 +14,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
 
-public class ViewPager extends ExtendedWidget {
+public class ViewPager extends CustomWidget {
 
   @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/img")
-  private WebElement image;
+  private Image image;
 
   @AndroidFindBy(id = "com.wallet.crypto.trustapp:id/title")
-  private WebElement title;
+  private Text title;
 
   protected ViewPager(WebElement element) {
     super(element);
